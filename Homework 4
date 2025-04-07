@@ -1,0 +1,45 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Interpolation Function
+def lagrange_interp(x_vals, y_vals, target):
+    n = len(x_vals)
+    total = 0
+
+    for i in range(n):
+        term = y_vals[i]
+        for j in range(n):
+            if i != j:
+                num = target - x_vals[j]
+                den = x_vals[i] - x_vals[j]
+                term *= num / den
+        total += term
+
+    return total
+
+# x and y values
+x_points = [1, 2, 3, 4]
+y_points = [1, 4, 9, 16]  # y = x^2
+
+# Value to interpolate
+t = 2.5
+estimated_y = lagrange_interp(x_points, y_points, t)
+
+print("Estimated value at t =", t, "is", estimated_y)
+
+# Plotting
+x_smooth = np.linspace(min(x_points), max(x_points), 200)
+y_smooth = [lagrange_interp(x_points, y_points, xi) for xi in x_smooth]
+
+plt.figure(figsize=(8, 5))
+plt.plot(x_smooth, y_smooth, label='Lagrange Interpolation', color='blue')
+plt.scatter(x_points, y_points, color='red', label='Given Points', zorder=5)
+plt.scatter(t, estimated_y, color='green', label=f'Interpolated Point (t={t})', zorder=5)
+
+plt.title("Lagrange Polynomial Interpolation")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
